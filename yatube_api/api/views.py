@@ -1,17 +1,18 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.permissions import (IsAuthenticated,
-                                        BasePermission, SAFE_METHODS)
+                                        BasePermission,
+                                        SAFE_METHODS)
 
-from posts.models import Post, Group, Comment
-from api.serializers import (PostSerializer, GroupSerializer,
+from posts.models import Post, Group
+from api.serializers import (PostSerializer,
+                             GroupSerializer,
                              CommentSerializer)
 
 
 class AuthorsOnly(BasePermission):
     def has_object_permission(
-            self, request, view, obj: Post | Comment
-    ) -> True | False:
+            self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
         return obj.author == request.user
